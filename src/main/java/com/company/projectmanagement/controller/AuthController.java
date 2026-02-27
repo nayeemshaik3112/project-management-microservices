@@ -1,32 +1,29 @@
 package com.company.projectmanagement.controller;
 
+import com.company.projectmanagement.dto.AuthRequest;
+import com.company.projectmanagement.dto.AuthResponse;
 import com.company.projectmanagement.dto.RegisterRequest;
-import com.company.projectmanagement.entity.User;
 import com.company.projectmanagement.repository.UserRepository;
+import com.company.projectmanagement.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private AuthService authService;
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest request){
-        User user = new User ();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        userRepository.save(user);
-        return "User registered Successfully";
+    public AuthResponse register(@RequestBody RegisterRequest request){
+        AuthResponse response = authService.register(request);
+        return response;
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody AuthRequest request){
+        AuthResponse reponse = authService.login(request);
+        return reponse;
     }
 }
