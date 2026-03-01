@@ -3,10 +3,8 @@ package com.company.projectmanagement.controller;
 import com.company.projectmanagement.dto.AuthRequest;
 import com.company.projectmanagement.dto.AuthResponse;
 import com.company.projectmanagement.dto.RegisterRequest;
-import com.company.projectmanagement.repository.UserRepository;
 import com.company.projectmanagement.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request){
-        AuthResponse reponse = authService.login(request);
-        return reponse;
+        AuthResponse response = authService.login(request);
+        return response;
     }
 }

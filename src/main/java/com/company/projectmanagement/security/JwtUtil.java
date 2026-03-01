@@ -1,4 +1,4 @@
-package com.company.projectmanagement.util;
+package com.company.projectmanagement.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

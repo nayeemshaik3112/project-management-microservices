@@ -7,11 +7,10 @@ import com.company.projectmanagement.entity.Role;
 import com.company.projectmanagement.entity.User;
 import com.company.projectmanagement.repository.RoleRepository;
 import com.company.projectmanagement.repository.UserRepository;
-import com.company.projectmanagement.util.JwtUtil;
+import com.company.projectmanagement.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +37,7 @@ public class AuthServiceImpl implements AuthService{
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setEmail(request.getEmail());
         user.setRole(role);
         userRepository.save(user);
         String token = jwtUtil.generateToken(user.getUsername());

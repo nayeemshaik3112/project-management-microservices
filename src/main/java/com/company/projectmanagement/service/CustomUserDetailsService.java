@@ -3,8 +3,12 @@ package com.company.projectmanagement.service;
 import com.company.projectmanagement.entity.User;
 import com.company.projectmanagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -13,17 +17,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        //Converts this user into USER details object , because spring secuirty cannot understand our USER entity
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found"));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
-                new java.util.ArrayList<>()
+                Collections.singletonList(
+                        new SimpleGrantedAuthority(user.getRole().getName())
+                )
         );
     }
 }
