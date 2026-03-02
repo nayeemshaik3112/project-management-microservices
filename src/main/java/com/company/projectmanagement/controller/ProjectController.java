@@ -1,7 +1,7 @@
 package com.company.projectmanagement.controller;
 
-import com.company.projectmanagement.dto.ProjectRequest;
-import com.company.projectmanagement.entity.Project;
+import com.company.projectmanagement.dto.ProjectRequestDTO;
+import com.company.projectmanagement.dto.ProjectResponseDTO;
 import com.company.projectmanagement.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,25 +18,24 @@ public class ProjectController {
     private ProjectService projectService;
 
     // CREATE PROJECT (ADMIN only - enforced by SecurityConfig)
-    @PostMapping
-    public ResponseEntity<?> createProject(@RequestBody ProjectRequest request) {
-        Project project = projectService.createProject(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(project);
+    @PostMapping("/create")
+    public ResponseEntity<ProjectResponseDTO> createProject(@RequestBody ProjectRequestDTO request){
+        ProjectResponseDTO dto = projectService.createProject(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     // GET ALL PROJECTS (USER and ADMIN)
     @GetMapping("/my-projects")
-    public ResponseEntity<List<Project>> getMyProjects() {
-        List<Project> projects = projectService.getMyProjects();
-        return ResponseEntity.ok(projects);
+    public ResponseEntity<List<ProjectResponseDTO>> getMyProjects() {
+        List<ProjectResponseDTO> dto = projectService.getMyProjects();
+        return ResponseEntity.ok(dto);
     }
 
     // GET PROJECT BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectById(@PathVariable Long id) {
-        Project project  = projectService.findById(id);
-        return ResponseEntity.ok(project);
+    public ResponseEntity<ProjectResponseDTO> getProjectById(@PathVariable Long id) {
+        ProjectResponseDTO DTO  = projectService.findById(id);
+        return ResponseEntity.ok(DTO);
     }
 
     // DELETE PROJECT (ADMIN only)

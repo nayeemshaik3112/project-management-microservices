@@ -1,6 +1,7 @@
 package com.company.projectmanagement.service;
 
-import com.company.projectmanagement.dto.ProjectRequest;
+import com.company.projectmanagement.dto.ProjectRequestDTO;
+import com.company.projectmanagement.dto.ProjectResponseDTO;
 import com.company.projectmanagement.entity.Project;
 import com.company.projectmanagement.entity.User;
 import com.company.projectmanagement.repository.ProjectRepository;
@@ -20,7 +21,7 @@ public class ProjectService {
     @Autowired
     private UserRepository userRepository;
 
-    public Project createProject(ProjectRequest request){
+    public ProjectResponseDTO createProject(ProjectRequestDTO request){
         User user = getAuthentication();
         Project project = new Project();
         project.setName(request.getName());
@@ -28,15 +29,19 @@ public class ProjectService {
         project.setStatus(request.getStatus());
         project.setUser(user);
         project.setCreatedAt(LocalDateTime.now());
-        return projectRepository.save(project);
+        Project savedproject = projectRepository.save(project);
+        return mapToDTO(savedproject);
     }
-    public List<Project> getMyProjects() {
+    public List<ProjectResponseDTO> getMyProjects(){
         User user = getAuthentication();
-        return projectRepository.findByUser(user);
+        List<Project> projects = projectRepository.findByUser(user);
+        return projects.stream().map(this::mapToDTO).toList();
     }
-    public Project findById(Long id) {
-        return projectRepository.findById(id).
-                orElseThrow(()-> new RuntimeException("Project not found with this ID" + id));
+    public ProjectResponseDTO findById(Long id){
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Project not found with ID " + id));
+        return mapToDTO(project);
     }
     public void DeleteProject(Long id){
         if(!projectRepository.existsById(id)){
@@ -53,5 +58,17 @@ public class ProjectService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return user;
     }
+
+    private ProjectResponseDTO mapToDTO(Project project){
+        ProjectResponseDTO dto = ProjectResponseDTO.builder()
+                .id(project.getId())
+                .name(project.getName())
+                .description(project.getDescription())
+                .status(project.getStatus())
+                .username(project.getUser().getUsername())
+                .build();
+        return dto;
+    }
+
 }
 
