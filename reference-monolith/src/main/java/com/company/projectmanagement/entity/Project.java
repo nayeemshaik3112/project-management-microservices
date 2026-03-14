@@ -35,10 +35,7 @@ public class Project {
     @Column(nullable = false)
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
-    private User user;
+    private Long ownerId;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

@@ -51,8 +51,6 @@ public class Task {
         Many Tasks belong to One Project
         This creates foreign key: project_id
      */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "project_id", nullable = false)
-    private Project project;
+    private Long projectId;
 
 }

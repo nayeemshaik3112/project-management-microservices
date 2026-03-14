@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-public class ProjectmanagementApplication {
+public class MicroservicesWorkspaceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProjectmanagementApplication.class, args);
+		SpringApplication.run(MicroservicesWorkspaceApplication.class, args);
 	}
 
 }
