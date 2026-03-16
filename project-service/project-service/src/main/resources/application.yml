@@ -7,6 +7,7 @@ spring:
 
 eureka:
   client:
+    registryFetchIntervalSeconds: 5
     register-with-eureka: true
     fetch-registry: true
     service-url:
@@ -34,3 +35,20 @@ resilience4j:
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
         permittedNumberOfCallsInHalfOpenState: 3
+  retry:
+    instances:
+      userServiceRetry:
+        maxAttempts: 3
+        waitDuration: 2s
+
+
+timelimiter:
+  instances:
+    userServiceTimeout:
+      timeoutDuration: 3s
+
+  bulkhead:
+    instances:
+      userServiceBulkhead:
+        maxConcurrentCalls: 5 #Only 5 concurrent requests are dedicated to userservice
+        maxWaitDuration: 0

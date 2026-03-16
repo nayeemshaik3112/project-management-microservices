@@ -2,8 +2,12 @@ package com.company.projectservice.service;
 
 import com.company.projectservice.DTO.UserDTO;
 import com.company.projectservice.client.UserClient;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import org.springframework.stereotype.Service;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -15,13 +19,23 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @CircuitBreaker(name = "userService", fallbackMethod = "userServiceFallback")//Protect this method with circuit breaker
-    public String getProjectForUser(String username) {
-        UserDTO user = userClient.getUser(username);
-        return "Project assigned to user: " + user.getUsername();
-    }
+    @Retry(name = "userServiceRetry")
+    @CircuitBreaker(name = "userService", fallbackMethod = "userServiceFallback")
+    @TimeLimiter(name = "userServiceTimeout")
+    @Bulkhead(name = "userServiceBulkhead")
+    public CompletableFuture<String> getProjectForUser(String username) {
 
-    public String userServiceFallback(String username, Throwable throwable) {
-        return "User Service is currently unavailable. Please try later.";
+        return CompletableFuture.supplyAsync(() -> {
+            System.out.println("Calling User Service...");
+            UserDTO user = userClient.getUser(username);
+            return "Project assigned to user: " + user.getUsername();
+        });
+    }
+    public CompletableFuture<String> userServiceFallback(String username, Throwable throwable) {
+
+        System.out.println("Fallback triggered because of: " + throwable.getClass().getName());
+        return CompletableFuture.completedFuture(
+                "User Service is slow or unavailable. Please try later...."
+        );
     }
 }

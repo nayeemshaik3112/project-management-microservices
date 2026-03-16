@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public User getUser(@PathVariable String username) {
+    public User getUser(@PathVariable String username) throws InterruptedException {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }

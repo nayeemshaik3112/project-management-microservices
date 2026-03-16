@@ -1,7 +1,9 @@
 package com.company.projectservice.service;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface ProjectService {
 
-    String getProjectForUser(String username);
+    CompletableFuture<String> getProjectForUser(String username);
 
 }

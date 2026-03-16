@@ -3,6 +3,8 @@ package com.company.projectservice.controller;
 import com.company.projectservice.service.ProjectService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/projects")
 public class ProjectController {
@@ -14,7 +16,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{username}")
-    public String getProjectForUser(@PathVariable String username) {
+    public CompletableFuture<String> getProjectForUser(@PathVariable String username) {
 
         return projectService.getProjectForUser(username);
     }
