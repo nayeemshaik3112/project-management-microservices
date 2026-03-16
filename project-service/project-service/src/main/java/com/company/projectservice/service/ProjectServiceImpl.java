@@ -4,6 +4,7 @@ import com.company.projectservice.DTO.UserDTO;
 import com.company.projectservice.client.UserClient;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class ProjectServiceImpl implements ProjectService {
     @CircuitBreaker(name = "userService", fallbackMethod = "userServiceFallback")
     @TimeLimiter(name = "userServiceTimeout")
     @Bulkhead(name = "userServiceBulkhead")
+    @RateLimiter(name = "userServiceRateLimiter")
     public CompletableFuture<String> getProjectForUser(String username) {
 
         return CompletableFuture.supplyAsync(() -> {
@@ -35,7 +37,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         System.out.println("Fallback triggered because of: " + throwable.getClass().getName());
         return CompletableFuture.completedFuture(
-                "User Service is slow or unavailable. Please try later...."
+                "Fallback due to: " + throwable.getClass().getSimpleName()
         );
     }
 }
