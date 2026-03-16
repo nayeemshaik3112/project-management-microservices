@@ -1,24 +1,21 @@
 package com.company.projectservice.controller;
 
-import com.company.projectservice.DTO.UserDTO;
-import com.company.projectservice.client.UserClient;
+import com.company.projectservice.service.ProjectService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/projects")
 public class ProjectController {
 
-    private final UserClient userClient;
+    private final ProjectService projectService;
 
-    public ProjectController(UserClient userClient) {
-        this.userClient = userClient;
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
     }
 
     @GetMapping("/{username}")
     public String getProjectForUser(@PathVariable String username) {
 
-        UserDTO user = userClient.getUser(username);
-
-        return "Project assigned to user: " + user.getUsername();
+        return projectService.getProjectForUser(username);
     }
 }
