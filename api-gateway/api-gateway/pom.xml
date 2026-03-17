@@ -64,10 +64,43 @@
 
 	<build>
 		<plugins>
+
+			<!-- Spring Boot Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<!-- Google Jib Plugin for Docker Image Build -->
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.4.0</version>
+
+				<configuration>
+
+					<!-- Base Image -->
+					<from>
+						<image>eclipse-temurin:17-jre</image>
+					</from>
+
+					<!-- Docker Image Name -->
+					<to>
+						<image>${project.artifactId}</image>
+					</to>
+
+					<!-- Container Configuration -->
+					<container>
+						<ports>
+							<port>8080</port>
+						</ports>
+						<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+					</container>
+
+				</configuration>
+
+			</plugin>
+
 		</plugins>
 	</build>
 

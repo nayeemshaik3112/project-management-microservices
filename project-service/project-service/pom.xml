@@ -51,7 +51,7 @@
 		<!-- Feign Client -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
+				<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
 
 		<!-- Lombok -->
@@ -104,30 +104,39 @@
 
 	<build>
 		<plugins>
+
+			<!-- Maven Compiler -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
 			</plugin>
+
+			<!-- Spring Boot Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!-- Docker Image Build with Jib -->
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.4.0</version>
 				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<from>
+						<image>eclipse-temurin:17-jre</image>
+					</from>
+					<to>
+						<image>${project.artifactId}</image>
+					</to>
+					<container>
+						<ports>
+							<port>8082</port>
+						</ports>
+					</container>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

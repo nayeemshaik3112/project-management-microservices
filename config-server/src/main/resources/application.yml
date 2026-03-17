@@ -11,3 +11,9 @@ spring:
         git:
           uri: https://github.com/nayeemshaik3112/project-management-config-repo
           clone-on-start: true
+
+config-server:
+  build: ./config-server
+  container_name: config-server
+  ports:
+    - "8888:8888"

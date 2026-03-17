@@ -6,9 +6,12 @@ spring:
     name: user-service
 
   datasource:
-    url: jdbc:mysql://localhost:3307/user_db
+    url: jdbc:mysql://mysql-db:3306/projectdb
     username: root
-    password: pass
+    password: root
+    hikari:
+      connection-timeout: 30000
+      initialization-fail-timeout: 60000
 
   jpa:
     hibernate:
@@ -18,6 +21,6 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-server:8761/eureka
   instance:
     prefer-ip-address: true
